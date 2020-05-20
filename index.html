@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Homework22</title>
+</head>
+<body>
+
+<script>
+
+
+class User {
+	constructor (firstName, lastName, birthYear) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthYear = birthYear;
+	}
+
+	static getCurrentYear() { 
+		return new Date().getFullYear(); 
+	}
+
+	get age() { 
+		return UserClass.getCurrentYear() - this.birthYear; 
+	}
+
+	get fullName() { 
+		return this.firstName + " " + this.lastName; 
+	}
+}
+
+class Student extends User {
+	constructor (firstName, lastName, birthYear) {
+		super(firstName, lastName, birthYear);
+		this.attendanceArray = [];
+		this.markArray = [];
+	}
+
+	present () {
+		this.pushToArray(this.attendanceArray, true);
+	}
+
+	absent () {
+		this.pushToArray(this.attendanceArray, false);
+	}
+
+	mark (mark) {
+		if(typeof mark !== "undefined" && mark > 0 && mark <= 10) {
+			this.pushToArray(this.markArray, mark);
+		}			
+	}
+
+	averageMark () {
+		let arraySum = this.markArray.reduce(function(array, currentMark){
+			return array + currentMark;
+		}, 0);
+
+		return arraySum / this.markArray.length;
+	}
+
+	attendance (){
+		let counter = 0;
+		for (var i = 0; i < this.attendanceArray.length; i++) {
+			if(this.attendanceArray[i] === true){
+				counter++;
+			}
+		}
+		return counter/this.attendanceArray.length * 100;
+	}
+
+	pushToArray (array, value) {
+		let index = 0;
+		let freeIndex;
+		while (typeof freeIndex === "undefined" && index < 30) {
+			if (typeof array[index] === "undefined") {
+				freeIndex = index;
+			} else {
+				index++;
+			}
+		}
+		if(typeof freeIndex !== "undefined") {
+			array[freeIndex] = value;
+		}
+		};
+}
+
+class Teacher extends User {
+	constructor (firstName, lastName, birthYear) {
+		super(firstName, lastName, birthYear);
+		this.activeGroups = [];
+		this.allGroups = [];
+	}
+
+	addGroup (group) {
+		this.allGroups.push(group);
+	}
+
+	changeGroupStatus (group) {
+		if (!this.activeGroups.includes(group)) {
+			this.activeGroups.push(group);
+		} else {
+			this.activeGroups = this.activeGroups.filter(arrGroup => arrGroup !== group);
+		}
+	}
+}
+
+const Dmitriy = new User("Ivan", "Ivanov", 1988);
+const Maria = new Student("Maria", "Ivanova", 1977);
+const Leonid = new Teacher("Petr", "Petrov", 1966);
+
+
+</script>
+
+</body>
+</html>
